@@ -114,11 +114,6 @@ missing_values[missing_values > 0]
 # Display rows where transaction_date is missing
 df[df["transaction_date"].isnull()]
 
-"""**Why not fill the date automatically?**
-
-> **[transaction_date]** is a critical field. Using the mean, median, or a random date would create false transaction records. In a real project, these rows would first be checked against the source system.
-"""
-
 # Remove rows with missing transaction dates
 df = df.dropna(subset=["transaction_date"])
 
@@ -131,8 +126,6 @@ print(df["transaction_amount"].isnull().sum())
 
 # Display rows where transaction_amount is missing
 df[df["transaction_amount"].isnull()]
-
-"""**`transaction_amount`** is a critical financial field, so filling it with an average could create incorrect transaction values."""
 
 # Remove rows with missing transaction amounts
 df = df.dropna(subset=["transaction_amount"])
@@ -181,8 +174,6 @@ df = df.dropna(subset=["transaction_date"])
 # Verify
 print("Invalid or missing dates:", df["transaction_date"].isnull().sum())
 
-
-
 # Recheck missing values
 print("Missing values in each column:")
 print(df.isnull().sum()[df.isnull().sum() > 0])
@@ -214,16 +205,6 @@ categorical_columns = [
 for column in categorical_columns:
     print(f"\n{column}:")
     print(df[column].unique())
-
-"""**The inconsistencies are mainly in:**
-
-* transaction_type
-* currency
-* payment_method
-* transaction_status
-
-The other categorical columns already look consistent.
-"""
 
 # Remove extra spaces from all categorical columns
 for column in categorical_columns:
@@ -272,58 +253,59 @@ plt.show()
 
 import matplotlib.pyplot as plt
 
-# Count transactions by status
+# Count transaction statuses
 status_counts = df["transaction_status"].value_counts()
 
-# Create donut chart
-plt.figure(figsize=(6,6))
+plt.figure(figsize=(8,8))
 
-plt.pie(
+wedges, texts, autotexts = plt.pie(
     status_counts,
-    labels=status_counts.index,
-    autopct="%1.1f%%",
-    startangle=90
+    labels=None,                 # Hide labels on the chart
+    autopct='%1.1f%%',
+    startangle=90,
+    pctdistance=0.75
 )
 
-# Draw a white circle in the center
-centre_circle = plt.Circle((0, 0), 0.70, fc="white")
+# Create donut hole
+centre_circle = plt.Circle((0, 0), 0.70, fc='white')
 plt.gca().add_artist(centre_circle)
 
+# Add legend
+plt.legend(
+    wedges,
+    status_counts.index,
+    title="Transaction Status",
+    loc="center left",
+    bbox_to_anchor=(1, 0.5)
+)
+
 plt.title("Transaction Status Distribution")
+plt.axis("equal")
+
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
+
+from google.colab import files
+files.download("transaction_status_distribution.png")
 
 plt.show()
 
 import matplotlib.pyplot as plt
 
-# Sum transaction amount by payment method
-payment_amount = df.groupby("payment_method")["transaction_amount"].sum()
+# Count transactions by payment method
+payment_counts = df["payment_method"].value_counts()
 
-# Plot horizontal bar chart
+# Horizontal bar chart
 plt.figure(figsize=(8,5))
-payment_amount.plot(kind="barh")
+payment_counts.plot(kind="barh")
 
-plt.title("Total Transaction Amount by Payment Method")
-plt.xlabel("Total Transaction Amount")
+plt.title("Customer Payment Method Preferences")
+plt.xlabel("Number of Transactions")
 plt.ylabel("Payment Method")
 
-plt.show()
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
 
-import pandas as pd
-import matplotlib.pyplot as plt
-
-# Convert transaction_amount to numeric
-df["transaction_amount"] = pd.to_numeric(df["transaction_amount"], errors="coerce")
-
-# Sum transaction amount by payment method
-payment_amount = df.groupby("payment_method")["transaction_amount"].sum()
-
-# Plot
-plt.figure(figsize=(8,5))
-payment_amount.plot(kind="barh")
-
-plt.title("Total Transaction Amount by Payment Method")
-plt.xlabel("Total Transaction Amount")
-plt.ylabel("Payment Method")
+from google.colab import files
+files.download("transaction_status_distribution.png")
 
 plt.show()
 
@@ -349,6 +331,12 @@ squarify.plot(
 
 plt.title("Transaction Amount by Merchant Category")
 plt.axis("off")
+
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
+
+from google.colab import files
+files.download("transaction_status_distribution.png")
+
 plt.show()
 
 import pandas as pd
@@ -369,25 +357,134 @@ plt.xlabel("Merchant Category")
 plt.ylabel("Total Transaction Amount")
 plt.xticks(rotation=45)
 
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
+
+from google.colab import files
+files.download("transaction_status_distribution.png")
+
+plt.show()
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Convert transaction_amount to numeric
+df["transaction_amount"] = pd.to_numeric(df["transaction_amount"], errors="coerce")
+
+# Group data
+channel_data = df.groupby("transaction_channel").agg(
+    Transaction_Count=("transaction_id", "count"),
+    Total_Amount=("transaction_amount", "sum")
+)
+
+# Bar positions
+x = np.arange(len(channel_data))
+width = 0.4
+
+# Plot
+plt.figure(figsize=(8,5))
+
+plt.bar(x - width/2, channel_data["Transaction_Count"], width, label="Transaction Count")
+plt.bar(x + width/2, channel_data["Total_Amount"], width, label="Total Amount")
+
+plt.xticks(x, channel_data.index, rotation=45)
+plt.xlabel("Transaction Channel")
+plt.ylabel("Value")
+plt.title("Transaction Channel Performance")
+plt.legend()
+
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
+
+from google.colab import files
+files.download("transaction_status_distribution.png")
+
+plt.show()
+
+import matplotlib.pyplot as plt
+
+# Count transactions by account type
+account_counts = df["account_type"].value_counts()
+
+# Plot column chart
+plt.figure(figsize=(8,5))
+account_counts.plot(kind="bar")
+
+plt.title("Transaction Activity by Account Type")
+plt.xlabel("Account Type")
+plt.ylabel("Number of Transactions")
+plt.xticks(rotation=45)
+
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
+
+from google.colab import files
+files.download("transaction_status_distribution.png")
+
+plt.show()
+
+import matplotlib.pyplot as plt
+
+# Top 10 merchants by transaction count
+top_merchants = df["merchant_name"].value_counts().head(10)
+
+# Plot horizontal bar chart
+plt.figure(figsize=(8,5))
+top_merchants.plot(kind="barh")
+
+plt.title("Top 10 Merchants by Transaction Activity")
+plt.xlabel("Number of Transactions")
+plt.ylabel("Merchant Name")
+
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
+
+from google.colab import files
+files.download("transaction_status_distribution.png")
+
 plt.show()
 
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Convert transaction_amount to numeric (if needed)
-df["transaction_amount"] = pd.to_numeric(df["transaction_amount"], errors="coerce")
+# Convert transaction_date to datetime
+df["transaction_date"] = pd.to_datetime(df["transaction_date"])
 
-# Sum transaction amount by city
-city_data = df.groupby("location_city")["transaction_amount"].sum()
+# Count transactions by date
+transaction_trend = df.groupby("transaction_date")["transaction_id"].count()
 
-# Plot column chart
+# Plot line chart
 plt.figure(figsize=(10,5))
-city_data.plot(kind="bar")
+plt.plot(transaction_trend.index, transaction_trend.values, marker='o')
 
-plt.title("Total Transaction Amount by City")
-plt.xlabel("City")
-plt.ylabel("Total Transaction Amount")
+plt.title("Transaction Activity Over Time")
+plt.xlabel("Transaction Date")
+plt.ylabel("Number of Transactions")
 plt.xticks(rotation=45)
+
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
+
+from google.colab import files
+files.download("transaction_status_distribution.png")
 
 plt.show()
 
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Convert columns to numeric
+df["balance_before"] = pd.to_numeric(df["balance_before"], errors="coerce")
+df["balance_after"] = pd.to_numeric(df["balance_after"], errors="coerce")
+
+# Scatter plot
+plt.figure(figsize=(8,5))
+
+plt.scatter(df["balance_before"], df["balance_after"])
+
+plt.title("Account Balance Before vs After Transactions")
+plt.xlabel("Balance Before")
+plt.ylabel("Balance After")
+
+plt.savefig("transaction_status_distribution.png", dpi=300, bbox_inches="tight")
+
+from google.colab import files
+files.download("transaction_status_distribution.png")
+
+plt.show()
