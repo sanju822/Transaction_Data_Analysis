@@ -222,7 +222,152 @@ Understand geographical distribution of customer transactions.
 *   Support regional marketing strategies.
     
 *   Assist operational planning by location.
+
+    6\. Analyze Transaction Channel Performance
+===========================================
+
+### Business Problem
+
+Determine which transaction channels handle the highest transaction activity and value.
+
+### Required Columns
+
+*   transaction\_channel
     
+*   transaction\_amount
+    
+*   transaction\_id
+    
+
+### Recommended Visualization
+
+**Clustered Bar Chart**
+
+### What the Visualization Helps Conclude
+
+*   Compare transaction volume and value across different transaction channels.
+    
+*   Identify the most frequently used transaction channels.
+    
+*   Support decisions on improving digital or physical service channels.
+    
+
+7\. Compare Transaction Activity Across Account Types
+=====================================================
+
+### Business Problem
+
+Understand how customers with different account types use banking services.
+
+### Required Columns
+
+*   account\_type
+    
+*   transaction\_amount
+    
+*   transaction\_id
+    
+
+### Recommended Visualization
+
+**Column Chart**
+
+### What the Visualization Helps Conclude
+
+*   Compare transaction activity among different account types.
+    
+*   Identify account types with higher customer engagement.
+    
+*   Support product development and targeted banking services.
+    
+
+8\. Identify Top Merchants by Transaction Activity
+==================================================
+
+### Business Problem
+
+Determine which merchants receive the highest customer transaction activity.
+
+### Required Columns
+
+*   merchant\_name
+    
+*   transaction\_amount
+    
+*   transaction\_id
+    
+
+### Recommended Visualization
+
+**Horizontal Bar Chart (Top N Merchants)**
+
+### What the Visualization Helps Conclude
+
+*   Identify merchants with the highest transaction volume or value.
+    
+*   Support merchant partnership and loyalty initiatives.
+    
+*   Assist in evaluating merchant relationships and promotional opportunities.
+    
+
+9\. Analyze Transaction Trends Over Time
+========================================
+
+### Business Problem
+
+Monitor how transaction activity changes over time.
+
+### Required Columns
+
+*   transaction\_date
+    
+*   transaction\_amount
+    
+*   transaction\_id
+    
+
+### Recommended Visualization
+
+**Line Chart**
+
+### What the Visualization Helps Conclude
+
+*   Observe changes in transaction activity over time.
+    
+*   Identify recurring transaction patterns.
+    
+*   Support operational planning and resource allocation.
+    
+
+10\. Monitor Customer Account Balance Changes
+=============================================
+
+### Business Problem
+
+Understand how customer account balances change after transactions.
+
+### Required Columns
+
+*   balance\_before
+    
+*   balance\_after
+    
+*   transaction\_amount
+    
+*   transaction\_id
+    
+
+### Recommended Visualization
+
+**Scatter Plot**
+
+### What the Visualization Helps Conclude
+
+*   Compare account balances before and after transactions.
+    
+*   Identify transactions with significant balance changes for further review.
+    
+*   Support monitoring of customer account activity and financial behavior.
 
 C. Five KPIs
 ============
